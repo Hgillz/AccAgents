@@ -1,0 +1,282 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}",
+        "options": {
+          "systemMessage": "=## Role:\n\nYou are a highly intelligent personal expense tracker.\n\n## Task:\n\nYou will understand the user's message and update the spreadsheet accordingly.\n\n## Instructions:\n\n### Understand the user's expense\n\n* understand from the user's message the details about the expense. You need to fill these columns on the sheet: Date, Description, Amount (CDN), Project\n\n### Updating the sheet\n\n* Use the \"Google Sheets\" tool to update the sheet.\n\n# Constraints:\n\n* you may receive some of the information in a random order. \n\n## Example structure:\n\n| Date    | Description | Amount (CDN) | Project\n| 05.12.2024 | Gas | $123.55 | ABC\n\nNote: if you update the sheet, tell the user how you updated it in this format:\n\nDate: 05.12.2024\nDescription: Gas\nAmounth (CDN): $123.55\nProject: ABC\n\nNote: Update the date format to  MM/DD/YYYY if it is in another format.\n\nNote if you have all the information you need, you can proceed without asking. If you are missing information, ask for you.",
+          "maxIterations": 3
+        }
+      },
+      "id": "2cd0e1a8-2ffc-4fe8-9733-4830df36c328",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        700,
+        60
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "ba4669de-7164-4f5b-afe9-89eb24fa8444",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        680,
+        320
+      ],
+      "typeVersion": 1.1,
+      "credentials": {
+        "openAiApi": {
+          "id": "WkHwpH5qgWGAlxn8",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WhatsApp Trigger').item.json.messages[0].text.body }}"
+      },
+      "id": "78d644a4-34f4-40fd-a69b-28efe3d38f4c",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        840,
+        320
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        460,
+        80
+      ],
+      "id": "5598afe4-2b3c-4ebc-8884-1be5b1f4463d",
+      "name": "WhatsApp Trigger",
+      "webhookId": "c89ab1cf-3b49-4448-a01a-e4acce230cbd",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "ljzQJrn7MnQqMbSr",
+          "name": "WhatsApp OAuth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1320qCXh-1MAe2m5qqsTN3P2N6X_wrNOQuivcLk9-Xqg",
+          "mode": "list",
+          "cachedResultName": "n8n 2025",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1320qCXh-1MAe2m5qqsTN3P2N6X_wrNOQuivcLk9-Xqg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1320qCXh-1MAe2m5qqsTN3P2N6X_wrNOQuivcLk9-Xqg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Date', ``, 'string') }}",
+            "Description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+            "Cost": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Cost', ``, 'string') }}",
+            "Project": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Project', ``, 'string') }}",
+            "Original Message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Original_Message', ``, 'string') }}",
+            "Output": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Cost",
+              "displayName": "Cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Project",
+              "displayName": "Project",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Original Message",
+              "displayName": "Original Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Output",
+              "displayName": "Output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        960,
+        260
+      ],
+      "id": "6eeb3d20-a43f-4ac9-a1fe-77f9059e6672",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BExALvc9fH2HXIvo",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "748631468324557",
+        "recipientPhoneNumber": "+16045637170",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        60
+      ],
+      "id": "faab25cc-1211-4c69-9789-1e690c88dc4a",
+      "name": "WhatsApp Business Cloud",
+      "webhookId": "ebf9519e-d951-483b-9b40-1f86eda26f9a",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "OyoMPbETxa9LkIBc",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a5dc51b3-8813-4630-9608-114955272cca",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "baa117fed3789edad774d66825bb44601815714dea29211e27c4f9bbe5dbf7b9"
+  },
+  "id": "62IjEuztY0GYy6Zi",
+  "tags": []
+}
